@@ -5,6 +5,7 @@ import com.mik.spring.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONObject;
 
 import java.util.Map;
 
@@ -27,7 +28,6 @@ public class OAuthAttributes {
     }
 
     public static OAuthAttributes of(String registeredId, String userNameAttributeName, Map<String, Object> attributes) {
-        System.out.println("registeredId : " + registeredId);
         if("naver".equals(registeredId)) {
             return ofNaver("id", attributes);
         }
