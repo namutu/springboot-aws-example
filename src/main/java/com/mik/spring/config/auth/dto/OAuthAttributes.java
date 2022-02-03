@@ -4,8 +4,6 @@ import com.mik.spring.domain.user.Role;
 import com.mik.spring.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
-import org.json.JSONObject;
 
 import java.util.Map;
 
@@ -30,8 +28,23 @@ public class OAuthAttributes {
     public static OAuthAttributes of(String registeredId, String userNameAttributeName, Map<String, Object> attributes) {
         if("naver".equals(registeredId)) {
             return ofNaver("id", attributes);
+        } else if("kakao".equals(registeredId)) {
+            return ofKakao("id", attributes);
         }
         return ofGoogle(userNameAttributeName, attributes);
+    }
+
+    private static OAuthAttributes ofKakao(String userNameAttributeName, Map<String, Object> attributes) {
+        Map<String, Object> kakaoAcountMap = (Map<String, Object>) attributes.get("kakao_account");
+        Map<String, Object> profileMap = (Map<String, Object>) kakaoAcountMap.get("profile");
+
+        return OAuthAttributes.builder()
+                .name((String) profileMap.get("nickname"))
+                .email((String) kakaoAcountMap.get("email"))
+                .picture((String) profileMap.get("profile_image_url"))
+                .attributes(attributes)
+                .nameAttributeKey(userNameAttributeName)
+                .build();
     }
 
     private static OAuthAttributes ofNaver(String userNameAttributeName, Map<String, Object> attributes) {
