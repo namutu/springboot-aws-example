@@ -6,6 +6,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -20,14 +22,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.hamcrest.Matchers.is;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(controllers = HelloController.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class HelloControllerTest {
 
-    @Autowired
-    private MockMvc mvc;
+    @LocalServerPort
+    private int port;
 
     @Autowired
     private WebApplicationContext context;
+
+    private MockMvc mvc;
 
     @Before
     public void setup() {
